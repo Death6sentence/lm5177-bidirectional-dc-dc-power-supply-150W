@@ -1,0 +1,17 @@
+LM5177 Power Converter Project
+
+Copyright (C) 2026 LM5177 Power Converter Project Contributors
+
+本仓库包含采用多种许可证授权的内容：
+
+- firmware/ 采用 GNU General Public License, version 3 or later (GPL-3.0-or-later) 授权。
+- hardware/ 和 mechanical/ 采用 CERN Open Hardware Licence, Version 2, Strongly Reciprocal (CERN-OHL-S-2.0) 授权。
+- docs/ 和 test-data/ 采用 Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA-4.0) 授权。
+
+完整许可证文本位于：
+
+- LICENSES/GPL-3.0-or-later.txt
+- LICENSES/CERN-OHL-S-2.0.txt
+- LICENSES/CC-BY-SA-4.0.txt
+
+第三方组件仍受其自身条款约束，具体内容见 THIRD_PARTY_NOTICES.md。

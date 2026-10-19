@@ -1,0 +1,29 @@
+# CubeMX / Keil generated output
+**/Debug/
+**/Release/
+**/Objects/
+**/Listings/
+*.axf
+*.hex
+*.map
+*.bin
+*.elf
+*.lst
+*.log
+*.uvoptx
+*.uvguix.*
+MDK-ARM/LM5177MCU/
+**/Backup/
+*.bak
+
+# Local IDE and agent metadata
+.vscode/
+.codegraph/
+.omo/
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
