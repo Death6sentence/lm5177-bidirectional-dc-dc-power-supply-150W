@@ -5,14 +5,14 @@
 项目主要规格为 **10-30 V 输入、0-24 V 可调输出、最大 6.25 A、最大 150 W**。
 
 > [!NOTE]
-> 150 W 工作点已可以稳定运行，对应 24 V / 6.25 A。当前仓库还未上传这部分测试数据，下方表格展示的是原论文中约 100 W 版本的历史测试结果。
+> 150 W 工作点已可以稳定运行，对应 24 V / 6.25 A。当前仓库还未上传这部分测试数据，下方表格展示的是 16 V / 约 100 W 工作点的现有测试结果。
 
 ## 主要功能
 
 - 四开关双向 Buck-Boost 功率级
 - STM32G431KBT6 数字控制
 - VIN、VOUT、IMON 和温度采样
-- 恒流控制、IMON 零点校准和故障锁存
+- 限流控制、IMON 零点校准和故障锁存
 - OLED 状态显示和 UART 遥测
 - DTRK/PWM 与 DAC/SS-ATRK 控制路径
 - 400 点正弦表和双板差分输出方案
@@ -37,13 +37,13 @@
 项目由 LM5177 功率板和 STM32G431 控制部分组成：
 
 1. LM5177、MOSFET、电感和滤波网络完成双向升降压变换。
-2. STM32G431 负责采样、恒流控制、参数设置、显示和遥测。
+2. STM32G431 负责采样、限流控制、参数设置、显示和遥测。
 3. OLED 显示运行状态，UART 输出调试和测量数据。
 4. 双板模式可通过两路输出之差生成交流分量。
 
 ![双板协同概念图：功率板 A 输出带直流偏置的正弦电压，功率板 B 输出恒定电压，负载使用两板差分输出](docs/images/paper/figure-3-3-dual-board-collaboration.png)
 
-图中的双板方案来自原论文，用于说明扩展思路，不代表已经完成 150 W 双板测试。
+图中的双板方案用于说明扩展思路，不代表已经完成 150 W 双板测试。
 
 ## 硬件
 
@@ -59,7 +59,7 @@
 
 主要实现包括：
 
-- 10 ms 恒流控制任务
+- 10 ms 限流控制任务
 - 100 ms 显示和遥测更新
 - IMON、VIN、VOUT 和温度采样
 - IMON 手动/自动零点校准
@@ -67,13 +67,13 @@
 - DTRK 软件等级 0-1000 映射到 TIM3 比较值 0-32
 - TIM3 采用 8 MHz 时钟，DTRK PWM 配置为 250 kHz
 
-![恒流控制与正弦波形生成流程，包含 400 点正弦表以及 DTRK/PWM、DAC/SS-ATRK 路径](docs/images/paper/figure-3-2-control-algorithm-flow.png)
+![限流控制与正弦波形生成流程，包含 400 点正弦表以及 DTRK/PWM、DAC/SS-ATRK 路径](docs/images/paper/figure-3-2-control-algorithm-flow.png)
 
 更详细的采样与校准说明见 [`firmware/IMON_CALCULATION.md`](firmware/IMON_CALCULATION.md)。
 
-## 历史测试数据
+## 测试数据
 
-以下是原论文和工作簿中记录的 16 V / 100 W 版本测试数据。150 W 版本的测试数据将在整理后补充。测试环境为 25 °C、裸板自然散热，纹波测试带宽限制为 20 MHz，负载为可调电阻负载。
+以下为 16 V / 约 100 W 工作点的测试数据，150 W 版本的数据将在整理后补充。测试环境为 25 °C、裸板自然散热，纹波测试带宽限制为 20 MHz，负载为可调电阻负载。
 
 ### 稳态测试
 
@@ -103,9 +103,9 @@
 | 30 V | 1 A | 15.96 V | -0.25% | 44 mVpp |
 | 30 V | 6.25 A | - | - | 48 mVpp |
 
-### 恒流误差
+### 限流误差
 
-| 输入 | 恒流设定 | 绝对误差 |
+| 输入 | 限流设定 | 绝对误差 |
 | --- | --- | --- |
 | 10 V | 1 A | 0.12 A |
 | 16 V | 1 A | 0.16 A |
@@ -136,7 +136,7 @@
 | [`firmware/`](firmware/) | STM32 固件、CubeMX 和 Keil 工程 |
 | [`hardware/altium/`](hardware/altium/) | 原理图、PCB、库和工程文件 |
 | [`mechanical/`](mechanical/) | 外壳模型与预览文件 |
-| [`test-data/`](test-data/) | 测试数据工作簿 |
+| [`test-data/`](test-data/) | 测试数据文件 |
 | [`docs/`](docs/) | 构建、硬件、验证和发布说明 |
 | [`LICENSES/`](LICENSES/) | 完整许可证文本 |
 
@@ -157,16 +157,16 @@
 
 ### 测试数据
 
-测试工作簿位于 [`test-data/LM5177_measurements.xlsx`](test-data/LM5177_measurements.xlsx)。使用前请阅读 [`docs/verification/test-data.md`](docs/verification/test-data.md)，不要直接把历史数据当作当前 150 W 版本的测试结果。
+测试数据文件位于 [`test-data/LM5177_measurements.xlsx`](test-data/LM5177_measurements.xlsx)。使用前请阅读 [`docs/verification/test-data.md`](docs/verification/test-data.md)，不要将现有数据直接作为 150 W 工作点的测试结果。
 
 ## 当前状态
 
 - [x] 150 W、24 V / 6.25 A 工作点稳定运行
 - [x] 固件、PCB 和机械外壳源文件已开源
-- [x] 原 100 W 版本测试数据已上传
+- [x] 16 V / 约 100 W 工作点测试数据已上传
 - [ ] 补充 150 W 版本测试数据、波形和温升记录
 
-完整测试工作簿位于 [`test-data/LM5177_measurements.xlsx`](test-data/LM5177_measurements.xlsx)。
+完整测试数据见 [`test-data/LM5177_measurements.xlsx`](test-data/LM5177_measurements.xlsx)。
 
 ## 安全说明
 
